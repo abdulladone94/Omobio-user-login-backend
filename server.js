@@ -34,6 +34,31 @@ app.post("/signup", (req, res) => {
   );
 });
 
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  db.query(
+    "SELECT * FROM login WHERE email = ? and password = ?",
+    [email, password],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      if (result.length > 0) {
+        res.send(result);
+      } else {
+        res.status(401).send({
+          success: false,
+          message: "Sory, email and password dosn't match",
+          err: err,
+        });
+        alert("Sory, email and password dosn't match");
+      }
+    }
+  );
+});
+
 app.listen(port, () => {
   console.log(`Server up and running on port ${port}`);
 });
